@@ -1,0 +1,17 @@
+---
+import { u } from '../../lib/data.js';
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+const artikel = (await getCollection('artikel')).sort((a, b) => b.data.tanggal - a.data.tanggal);
+---
+<Base judul="Artikel alat tani dan perkakas" deskripsi="Panduan memilih dan merawat alat pertanian dan perkakas dari Estu Karya.">
+  <div class="wadah tulisan">
+    <h1>Artikel</h1>
+    <p class="redup">Panduan memilih dan merawat alat pertanian, ditulis dari pengalaman bengkel dan toko kami.</p>
+    <ul class="daftar-artikel">
+      {artikel.map((a) => (
+        <li><a href={u(`/artikel/${a.id}/`)}><h2>{a.data.judul}</h2><p>{a.data.ringkas}</p></a></li>
+      ))}
+    </ul>
+  </div>
+</Base>

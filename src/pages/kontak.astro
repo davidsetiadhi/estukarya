@@ -1,0 +1,26 @@
+---
+import Base from '../layouts/Base.astro';
+import Ikon from '../components/Ikon.astro';
+import { toko, waLink } from '../lib/data.js';
+const a = toko.alamat;
+---
+<Base judul="Kontak dan alamat" deskripsi={`Alamat Estu Karya: ${a.jalan}, ${a.kecamatan}, ${a.kota}, ${a.provinsi}. WhatsApp ${toko.whatsapp_tampil}.`}>
+  <div class="wadah tulisan">
+    <h1>Kontak</h1>
+    <p>Cara tercepat menghubungi kami adalah WhatsApp. Kirim nama barang atau fotonya, admin akan membalas.</p>
+    <p><a class="tombol tombol--wa" href={waLink('Halo Estu Karya, saya mau bertanya.')} target="_blank" rel="noopener"><Ikon nama="wa" />WhatsApp {toko.whatsapp_tampil}</a></p>
+    <h2>Alamat</h2>
+    <address style="font-style:normal">
+      <b>Estu Karya</b><br />{a.jalan}<br />{a.kecamatan}, {a.kota}<br />{a.provinsi}
+    </address>
+    <p style="margin-top:1rem"><a href={toko.peta} target="_blank" rel="noopener">Buka di Google Maps</a></p>
+    {toko.jam_buka.length > 0 && (
+      <>
+        <h2>Jam buka</h2>
+        <ul>{toko.jam_buka.map((j) => <li>{j.hari}: {j.jam}</li>)}</ul>
+      </>
+    )}
+    <h2>Telepon dan email</h2>
+    <p>Telepon {toko.telepon}<br />Email <a href={`mailto:${toko.email}`}>{toko.email}</a></p>
+  </div>
+</Base>

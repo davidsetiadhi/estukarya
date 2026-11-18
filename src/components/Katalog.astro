@@ -1,0 +1,31 @@
+---
+import KartuProduk from './KartuProduk.astro';
+import { waLink } from '../lib/data.js';
+interface Props { produk: any[]; labelCari: string; kosong: string; waKosong: string }
+const { produk, labelCari, kosong, waKosong } = Astro.props;
+const kategori = [...new Set(produk.map((p) => p.kategori))];
+---
+{produk.length === 0 ? (
+  <div class="kosong">
+    <p>{kosong}</p>
+    <a class="tombol tombol--wa" href={waLink(waKosong)} target="_blank" rel="noopener">Tanya lewat WhatsApp</a>
+  </div>
+) : (
+  <>
+    <label class="sr-only" for="cari">{labelCari}</label>
+    <input class="cari" id="cari" type="search" placeholder={labelCari} data-cari />
+    {kategori.length > 1 && (
+      <div class="filter" role="group" aria-label="Saring menurut kategori" style="margin-top:1rem">
+        <button type="button" data-filter="semua" aria-pressed="true">Semua</button>
+        {kategori.map((k) => <button type="button" data-filter={k} aria-pressed="false">{k}</button>)}
+      </div>
+    )}
+    <div class="grid-produk" data-katalog style="margin-top:1rem">
+      {produk.map((p) => <KartuProduk p={p} />)}
+    </div>
+    <div class="kosong" data-tidak-ketemu hidden style="margin-top:1rem">
+      <p>Barang yang kamu cari belum ada di daftar. Tanyakan saja, mungkin stoknya ada di gudang.</p>
+      <a class="tombol tombol--wa" href={waLink(waKosong)} target="_blank" rel="noopener">Tanya lewat WhatsApp</a>
+    </div>
+  </>
+)}

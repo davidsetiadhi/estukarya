@@ -1,0 +1,13 @@
+---
+import HalamanProduk from '../../components/HalamanProduk.astro';
+import { produkSegmen } from '../../lib/data.js';
+export async function getStaticPaths() {
+  const semua = await produkSegmen('bekas');
+  return semua.map((p) => ({
+    params: { id: p.id },
+    props: { p, lain: semua.filter((x) => x.id !== p.id && x.stok !== 'terjual').slice(0, 4) },
+  }));
+}
+const { p, lain } = Astro.props;
+---
+<HalamanProduk p={p} lain={lain} />

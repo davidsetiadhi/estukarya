@@ -1,0 +1,26 @@
+{
+  "demo": true,
+  "nama": "Estu Karya",
+  "tagline": "Supplier alat tani dan perkakas sejak 1986",
+  "deskripsi": "Estu Karya, supplier alat pertanian dan perkakas dari Ceper, Klaten, sejak 1986. Cangkul, sabit, parang, sekop, wajan cor besi, dan barang bekas teknik. Eceran dan grosir, kirim ke seluruh Indonesia.",
+  "berdiri": 1986,
+  "pendiri": "Bapak Samidi",
+  "whatsapp": "6281804400101",
+  "whatsapp_tampil": "0818-0440-0101",
+  "telepon": "(0272) 552607",
+  "email": "estukarya@gmail.com",
+  "alamat": {
+    "jalan": "Jl. Solo-Yogya km 28, Karangwuni",
+    "kecamatan": "Ceper",
+    "kota": "Klaten",
+    "provinsi": "Jawa Tengah",
+    "kodepos": "",
+    "negara": "ID"
+  },
+  "peta": "https://www.google.com/maps/search/?api=1&query=Jl.+Solo-Yogya+km+28+Karangwuni+Ceper+Klaten",
+  "jam_buka": [],
+  "instagram": "",
+  "tokopedia": "",
+  "shopee": "",
+  "_catatan": "Nomor dan alamat diambil dari website lama (2013-2016) dan wajib dicek ulang sebelum website tayang. Isi kodepos dan jam_buka, contoh: [{\"hari\": \"Senin sampai Sabtu\", \"jam\": \"08.00 - 16.00\"}]."
+}

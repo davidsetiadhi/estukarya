@@ -1,0 +1,21 @@
+---
+import Base from '../../layouts/Base.astro';
+import Katalog from '../../components/Katalog.astro';
+import { produkSegmen } from '../../lib/data.js';
+const semua = await produkSegmen('bekas');
+const urutan = { tersedia: 0, tanya: 0, dipesan: 1, habis: 2, terjual: 3 };
+const produk = [...semua].sort((a, b) => (urutan[a.stok] ?? 0) - (urutan[b.stok] ?? 0));
+---
+<Base judul="Barang bekas teknik: mesin, perkakas, dan suku cadang" deskripsi="Barang bekas teknik dari gudang Estu Karya di Ceper, Klaten: mesin bengkel, mesin pertanian, motor listrik, perkakas, dan suku cadang. Harga bisa nego, bisa dilihat langsung.">
+  <section class="bagian">
+    <div class="wadah">
+      <div class="kepala-bagian">
+        <div>
+          <h1>Barang bekas teknik</h1>
+          <p class="redup">Mesin, perkakas bengkel, dan suku cadang dari gudang keluarga. Tiap barang hanya ada satu, harga bisa nego, dan bisa dilihat langsung di Ceper, Klaten.</p>
+        </div>
+      </div>
+      <Katalog produk={produk} labelCari="Cari barang, misalnya mesin bubut" kosong="Barang bekas sedang difoto dan didata. Cek lagi minggu ini, atau tanyakan barang yang kamu cari." waKosong="Halo Estu Karya, saya cari barang bekas:" />
+    </div>
+  </section>
+</Base>

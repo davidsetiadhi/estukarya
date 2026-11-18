@@ -1,0 +1,38 @@
+---
+import Base from '../../layouts/Base.astro';
+import KartuProduk from '../../components/KartuProduk.astro';
+import { getCollection, render } from 'astro:content';
+import { semuaProduk, u } from '../../lib/data.js';
+export async function getStaticPaths() {
+  const artikel = await getCollection('artikel');
+  return artikel.map((a) => ({ params: { id: a.id }, props: { a } }));
+}
+const { a } = Astro.props;
+const { Content } = await render(a);
+const produk = (await semuaProduk()).filter((p) => a.data.produk.includes(p.id));
+const situs = Astro.site ?? new URL('https://estukarya.pages.dev');
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: a.data.judul,
+  description: a.data.ringkas,
+  datePublished: a.data.tanggal.toISOString().slice(0, 10),
+  author: { '@type': 'Organization', name: 'Estu Karya' },
+  publisher: { '@id': new URL(u('/#toko'), situs).href },
+  inLanguage: 'id-ID',
+};
+---
+<Base judul={a.data.judul} deskripsi={a.data.ringkas} tipe="article" schema={[schema]}>
+  <article class="wadah tulisan">
+    <nav class="remah" aria-label="Lokasi halaman"><a href={u('/')}>Beranda</a> / <a href={u('/artikel/')}>Artikel</a></nav>
+    <h1 style="margin-top:1rem">{a.data.judul}</h1>
+    <p class="redup">{a.data.tanggal.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+    <Content />
+  </article>
+  {produk.length > 0 && (
+    <section class="wadah bagian" style="padding-top:0">
+      <h2>Barang yang dibahas</h2>
+      <div class="grid-produk">{produk.map((p) => <KartuProduk p={p} />)}</div>
+    </section>
+  )}
+</Base>

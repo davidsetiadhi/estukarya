@@ -1,0 +1,10 @@
+---
+import { u } from '../lib/data.js';
+import Base from '../layouts/Base.astro';
+---
+<Base judul="Halaman tidak ditemukan">
+  <div class="wadah tulisan">
+    <h1>Halaman tidak ditemukan</h1>
+    <p>Alamat ini tidak ada atau barangnya sudah dihapus. Coba lihat katalog <a href={u('/perkakas/')}>perkakas</a> atau <a href={u('/barang-bekas/')}>barang bekas</a>.</p>
+  </div>
+</Base>

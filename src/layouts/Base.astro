@@ -1,0 +1,171 @@
+---
+import '../styles/global.css';
+import Ikon from '../components/Ikon.astro';
+import { toko, waLink, u } from '../lib/data.js';
+
+interface Props {
+  judul: string;
+  deskripsi?: string;
+  gambar?: string;
+  schema?: object[];
+  tipe?: 'website' | 'product' | 'article';
+}
+const { judul, deskripsi = toko.deskripsi, gambar = u('/foto/og-estukarya.jpg'), schema = [], tipe = 'website' } = Astro.props;
+const situs = Astro.site ?? new URL('https://estukarya.pages.dev');
+const kanonik = new URL(Astro.url.pathname, situs).href;
+const gambarPenuh = new URL(gambar, situs).href;
+const judulPenuh = judul === toko.nama ? `${toko.nama}, ${toko.tagline}` : `${judul} | ${toko.nama}`;
+const path = Astro.url.pathname;
+const menu = [
+  ['/perkakas/', 'Perkakas'],
+  ['/barang-bekas/', 'Barang bekas'],
+  ['/cara-pesan/', 'Cara pesan'],
+  ['/tentang/', 'Tentang'],
+  ['/artikel/', 'Artikel'],
+  ['/kontak/', 'Kontak'],
+];
+const a = toko.alamat;
+const bisnis = {
+  '@context': 'https://schema.org',
+  '@type': 'HardwareStore',
+  '@id': new URL(u('/#toko'), situs).href,
+  name: toko.nama,
+  description: toko.deskripsi,
+  url: new URL(u('/'), situs).href,
+  logo: new URL(u('/favicon.svg'), situs).href,
+  image: gambarPenuh,
+  telephone: '+' + toko.whatsapp,
+  email: toko.email,
+  foundingDate: String(toko.berdiri),
+  founder: { '@type': 'Person', name: toko.pendiri },
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: a.jalan,
+    addressLocality: `${a.kecamatan}, ${a.kota}`,
+    addressRegion: a.provinsi,
+    ...(a.kodepos ? { postalCode: a.kodepos } : {}),
+    addressCountry: a.negara,
+  },
+  areaServed: 'ID',
+  priceRange: 'Rp',
+};
+const semuaSchema = [bisnis, ...schema];
+---
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{judulPenuh}</title>
+    <meta name="description" content={deskripsi} />
+    {toko.demo && <meta name="robots" content="noindex, nofollow" />}
+    <link rel="canonical" href={kanonik} />
+    <link rel="icon" href={u('/favicon.svg')} type="image/svg+xml" />
+    <meta name="theme-color" content="#23272b" />
+    <meta property="og:type" content={tipe === 'product' ? 'product' : tipe} />
+    <meta property="og:site_name" content={toko.nama} />
+    <meta property="og:locale" content="id_ID" />
+    <meta property="og:title" content={judulPenuh} />
+    <meta property="og:description" content={deskripsi} />
+    <meta property="og:url" content={kanonik} />
+    <meta property="og:image" content={gambarPenuh} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,600..800&family=Source+Sans+3:wght@400;600;700&display=swap"
+    />
+    {semuaSchema.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
+  </head>
+  <body>
+    <a class="sr-only" href="#isi">Langsung ke isi</a>
+    {toko.demo && (
+      <div class="pita-demo" role="note">Versi uji coba. Katalog berisi barang dari website lama Estu Karya (2013 sampai 2016), jadi harga dan stok belum tentu berlaku.</div>
+    )}
+    <header class="kepala">
+      <div class="wadah">
+        <a class="merek" href={u('/')} aria-label="Estu Karya, beranda">
+          <svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18" fill="none" stroke="#d9a62e" stroke-width="2.5" /><text x="20" y="25.5" text-anchor="middle" font-family="Archivo, sans-serif" font-weight="800" font-size="15" fill="#d9a62e">EK</text></svg>
+          <span><b>ESTU KARYA</b><small>Ceper, Klaten, sejak 1986</small></span>
+        </a>
+        <button class="tombol-menu" type="button" aria-expanded="false" aria-controls="nav-utama" data-menu>
+          <Ikon nama="menu" /><span class="sr-only">Menu</span>
+        </button>
+        <nav class="nav" id="nav-utama" aria-label="Menu utama">
+          {menu.map(([href, label]) => <a href={u(href)} aria-current={path.startsWith(u(href)) ? 'page' : undefined}>{label}</a>)}
+        </nav>
+        <button class="tombol-keranjang" type="button" data-buka-keranjang aria-label="Buka keranjang">
+          <Ikon nama="keranjang" /><span data-jumlah>0</span>
+        </button>
+      </div>
+    </header>
+
+    <main id="isi">
+      <slot />
+    </main>
+
+    <footer class="kaki">
+      <div class="wadah">
+        <div>
+          <h2>Estu Karya</h2>
+          <p>Supplier alat pertanian, perkakas, dan barang teknik dari Ceper, Klaten. Melayani petani, toko tani, dan usaha rumahan sejak {toko.berdiri}.</p>
+        </div>
+        <div>
+          <h2>Kontak</h2>
+          <address>
+            {a.jalan}<br />{a.kecamatan}, {a.kota}, {a.provinsi}<br />
+            <a href={waLink('Halo Estu Karya, saya mau bertanya.')}>WhatsApp {toko.whatsapp_tampil}</a><br />
+            Telepon {toko.telepon}
+          </address>
+        </div>
+        <div>
+          <h2>Menu</h2>
+          <ul>{menu.map(([href, label]) => <li><a href={u(href)}>{label}</a></li>)}</ul>
+        </div>
+      </div>
+      <div class="wadah"><p class="redup" style="margin-top:2rem;color:#9aa2a8">© {new Date().getFullYear()} Estu Karya.</p></div>
+    </footer>
+
+    <a class="wa-melayang" href={waLink('Halo Estu Karya, saya mau bertanya.')} target="_blank" rel="noopener">
+      <Ikon nama="wa" /><span>Chat WhatsApp</span>
+    </a>
+
+    <div class="laci" data-laci aria-hidden="true">
+      <div class="laci__latar" data-tutup-keranjang></div>
+      <section class="laci__panel" role="dialog" aria-modal="true" aria-labelledby="judul-keranjang">
+        <div class="laci__kepala">
+          <h2 id="judul-keranjang">Keranjang</h2>
+          <button class="laci__tutup" type="button" data-tutup-keranjang aria-label="Tutup keranjang">×</button>
+        </div>
+        <div class="laci__isi" data-isi-keranjang></div>
+        <form class="laci__kaki" data-form-pesan novalidate>
+          <div class="laci__total"><span>Perkiraan total</span><span data-total>-</span></div>
+          <label for="pesan-nama">Nama</label>
+          <input id="pesan-nama" name="nama" autocomplete="name" required />
+          <label for="pesan-kota">Kota tujuan pengiriman</label>
+          <input id="pesan-kota" name="kota" autocomplete="address-level2" required />
+          <label for="pesan-catatan">Catatan (tidak wajib)</label>
+          <textarea id="pesan-catatan" name="catatan" rows="2"></textarea>
+          <p class="galat" data-galat hidden></p>
+          <button class="tombol tombol--wa tombol--lebar" type="submit"><Ikon nama="wa" />Pesan lewat WhatsApp</button>
+          <small class="redup">Admin akan membalas dengan harga akhir, ongkir, dan cara bayar.</small>
+        </form>
+      </section>
+    </div>
+
+    <script define:vars={{ wa: toko.whatsapp }}>
+      window.ESTU_WA = wa;
+    </script>
+    <script>
+      import { pasangKeranjang } from '../lib/keranjang.js';
+      pasangKeranjang();
+      const tombolMenu = document.querySelector('[data-menu]');
+      const nav = document.getElementById('nav-utama');
+      tombolMenu?.addEventListener('click', () => {
+        const buka = nav.classList.toggle('terbuka');
+        tombolMenu.setAttribute('aria-expanded', String(buka));
+      });
+    </script>
+  </body>
+</html>

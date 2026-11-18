@@ -1,0 +1,33 @@
+---
+import Base from '../layouts/Base.astro';
+import Cap from '../components/Cap.astro';
+import { toko, u } from '../lib/data.js';
+const arsip = [
+  ['proses-pembuatan-alat-mesin-pertanian.jpg', 'Perakitan alat mesin pertanian di bengkel'],
+  ['proses-pembuatan-alat-mesin-pertanian-estukarya.jpg', 'Bengkel Estu Karya di Jalan Solo-Yogya km 28'],
+  ['proses-pembuatan-mesin-pencetak-pakan-ikan.jpg', 'Pembuatan mesin pencetak pakan ikan'],
+  ['proses-pembuatan-pengaduk-pakan-ikan.jpg', 'Pembuatan mesin pengaduk pakan ikan'],
+  ['pande-besi.jpg', 'Pande besi di bengkel'],
+  ['proses-produksi-estu-karya-1.jpg', 'Proses produksi Estu Karya'],
+];
+---
+<Base judul="Tentang Estu Karya, sejak 1986" deskripsi="Sejarah Estu Karya, didirikan Bapak Samidi di Ceper, Klaten, pada 1986. Dulu produsen power thresher dan perkakas tani, sekarang supplier alat pertanian dan barang teknik.">
+  <div class="wadah tulisan">
+    <Cap class="cap" />
+    <h1>Tentang Estu Karya</h1>
+    <p>Bapak Samidi mendirikan Estu Karya pada 1986 di Karangwuni, Ceper, Klaten, di tepi jalan raya Solo-Yogya. Modal awalnya peralatan bengkel yang sederhana, bakat yang turun dari keluarga, dan pengalaman alat mesin pertanian yang beliau dapat saat bekerja di perusahaan.</p>
+    <p>Dengan peralatan sederhana itu, bengkel Estu Karya membuat mesin pertanian yang kualitasnya cukup baik, dan pada tahun-tahun berikutnya usaha ini berkembang pesat. Produknya mulai dari perkakas tangan seperti cangkul, sabit, sorok, dan parang, sampai mesin: power thresher perontok padi, perontok padi roda empat, hammermill, mesin pencetak dan pengaduk pakan ikan, mesin pemipil jagung, dan gerobak traktor.</p>
+
+    <div class="foto-arsip">
+      {arsip.map(([f, k]) => (
+        <figure><img src={u(`/foto/arsip/${f}`)} alt={k} width="400" height="300" loading="lazy" /><figcaption>{k}</figcaption></figure>
+      ))}
+    </div>
+
+    <h2>Estu Karya hari ini</h2>
+    <p>Bengkel produksinya sudah berhenti. Estu Karya sekarang menjadi supplier: kami memasok perkakas dan alat tani dari pembuat lain, eceran maupun grosir, dan memilihnya dengan pengalaman yang sama, yaitu tahu alat mana yang awet di sawah.</p>
+    <p>Gudang keluarga juga menyimpan banyak barang teknik, dari mesin bengkel sampai suku cadang. Barang-barang itu kami data dan jual satu per satu di halaman <a href={u('/barang-bekas/')}>Barang bekas</a>.</p>
+    <p>Kalau dulu kamu pernah membeli perontok padi atau cangkul dari bengkel kami, kami senang mendengar ceritanya. Kirim saja lewat WhatsApp.</p>
+    <p class="redup" style="font-size:0.95rem">Foto di halaman ini berasal dari website lama Estu Karya (2013 sampai 2016).</p>
+  </div>
+</Base>

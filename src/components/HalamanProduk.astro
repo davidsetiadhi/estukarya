@@ -1,0 +1,123 @@
+---
+import Base from '../layouts/Base.astro';
+import Ikon from './Ikon.astro';
+import KartuProduk from './KartuProduk.astro';
+import { rupiah, waLink, urlProduk, STATUS, toko, u } from '../lib/data.js';
+interface Props { p: any; lain: any[] }
+const { p, lain } = Astro.props;
+const situs = Astro.site ?? new URL('https://estukarya.pages.dev');
+const bekas = p.segmen === 'bekas';
+const indukUrl = bekas ? '/barang-bekas/' : '/perkakas/';
+const indukNama = bekas ? 'Barang bekas' : 'Perkakas';
+const bisaBeli = !['terjual', 'habis'].includes(p.stok);
+const dataKeranjang = JSON.stringify({ id: p.id, nama: p.nama, harga: p.harga, satuan: p.satuan, foto: p.foto[0] || '' });
+const pesanTanya = `Halo Estu Karya, saya mau tanya ${bekas ? 'barang bekas' : 'barang'} ini: ${p.nama}\n${new URL(urlProduk(p), situs).href}`;
+const judul = bekas ? `Dijual ${p.nama} (bekas)` : `Jual ${p.nama}, eceran dan grosir`;
+const deskripsi = `${p.ringkas} ${bekas ? 'Barang bekas, lokasi Ceper, Klaten.' : 'Kirim ke seluruh Indonesia.'} Pesan lewat WhatsApp ke Estu Karya.`;
+const ketersediaan = {
+  tersedia: 'https://schema.org/InStock',
+  tanya: 'https://schema.org/InStock',
+  dipesan: 'https://schema.org/LimitedAvailability',
+  habis: 'https://schema.org/OutOfStock',
+  terjual: 'https://schema.org/SoldOut',
+}[p.stok] || 'https://schema.org/InStock';
+const schemaProduk = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: p.nama,
+  description: p.deskripsi || p.ringkas,
+  image: p.foto.map((f) => new URL(f, situs).href),
+  category: p.kategori,
+  sku: p.id,
+  brand: { '@type': 'Brand', name: 'Estu Karya' },
+  // Google requires a price on Offer, so items priced "tanya harga" publish without one.
+  ...(p.harga ? { offers: {
+    '@type': 'Offer',
+    url: new URL(urlProduk(p), situs).href,
+    priceCurrency: 'IDR',
+    price: p.harga,
+    availability: ketersediaan,
+    itemCondition: bekas ? 'https://schema.org/UsedCondition' : 'https://schema.org/NewCondition',
+    seller: { '@id': new URL(u('/#toko'), situs).href },
+  } } : {}),
+};
+const remah = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Beranda', item: new URL(u('/'), situs).href },
+    { '@type': 'ListItem', position: 2, name: indukNama, item: new URL(u(indukUrl), situs).href },
+    { '@type': 'ListItem', position: 3, name: p.nama },
+  ],
+};
+---
+<Base judul={judul} deskripsi={deskripsi} gambar={p.foto[0]} tipe="product" schema={p.contoh ? [] : p.harga ? [schemaProduk, remah] : [remah]}>
+  <div class="wadah">
+    <nav class="remah" aria-label="Lokasi halaman"><a href={u('/')}>Beranda</a> / <a href={u(indukUrl)}>{indukNama}</a> / {p.nama}</nav>
+    <div class="produk">
+      <div class="galeri">
+        <div class="galeri__utama">
+          {p.foto[0] && <img src={p.foto[0]} alt={p.nama} width="800" height="600" data-galeri-utama />}
+        </div>
+        {p.foto.length > 1 && (
+          <div class="galeri__kecil">
+            {p.foto.map((f, i) => (
+              <button type="button" data-galeri-pilih={f} aria-current={String(i === 0)} aria-label={`Foto ${i + 1}`}>
+                <img src={f} alt="" width="76" height="76" loading="lazy" />
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+      <div>
+        <span class="kartu__kat">{p.kategori}</span>
+        <h1 style="font-size:clamp(1.8rem,4vw,2.6rem)">{p.nama}</h1>
+        {p.contoh && <p class="label label--contoh">Contoh tampilan. Tidak ikut tayang di website.</p>}
+        <p class="harga-besar">
+          {p.harga ? <>{rupiah(p.harga)} <small>/ {p.satuan}</small></> : p.stok === 'terjual' ? 'Terjual' : <>Tanya harga <small>lewat WhatsApp</small></>}
+        </p>
+        {p.hargaGrosir && <p class="grosir">Harga grosir {rupiah(p.hargaGrosir)} / {p.satuan}{p.minGrosir && ` untuk pembelian minimal ${p.minGrosir} ${p.satuan}`}</p>}
+        <p><span class:list={['label', { 'label--bekas': bekas, 'label--terjual': p.stok === 'terjual', 'label--dipesan': p.stok === 'dipesan' }]}>{bekas ? 'Bekas' : 'Baru'}</span> <span class="redup">{STATUS[p.stok] || STATUS.tanya}</span></p>
+        <p>{p.deskripsi || p.ringkas}</p>
+        {p.spesifikasi.length > 0 && (
+          <table class="spek">
+            <caption class="sr-only">Spesifikasi {p.nama}</caption>
+            <tbody>{p.spesifikasi.map(([k, v]) => <tr><th scope="row">{k || 'Keterangan'}</th><td>{v}</td></tr>)}</tbody>
+          </table>
+        )}
+        <div class="beli">
+          {bisaBeli && !bekas && (
+            <>
+              <label for="jumlah" class="redup">Jumlah ({p.satuan})</label>
+              <div class="beli__baris">
+                <div class="jumlah">
+                  <button type="button" data-langkah="-1" data-target="#jumlah" aria-label="Kurangi jumlah">−</button>
+                  <input id="jumlah" type="number" min="1" value="1" inputmode="numeric" />
+                  <button type="button" data-langkah="1" data-target="#jumlah" aria-label="Tambah jumlah">+</button>
+                </div>
+                <button class="tombol tombol--utama" type="button" data-tambah={dataKeranjang} data-jumlah-dari="#jumlah"><Ikon nama="keranjang" />Tambah ke keranjang</button>
+              </div>
+            </>
+          )}
+          {bisaBeli && bekas && (
+            <button class="tombol tombol--utama" type="button" data-tambah={dataKeranjang} data-langsung><Ikon nama="keranjang" />Masukkan keranjang</button>
+          )}
+          <a class="tombol tombol--wa" href={waLink(pesanTanya)} target="_blank" rel="noopener">
+            <Ikon nama="wa" />{bekas ? 'Tanya kondisi atau minta video' : 'Tanya barang ini lewat WhatsApp'}
+          </a>
+        </div>
+        <p class="redup" style="margin-top:1rem;font-size:0.95rem">
+          {bekas
+            ? 'Barang bisa dilihat langsung di Ceper, Klaten. Pengiriman barang berat lewat kargo atau ekspedisi truk.'
+            : 'Pengiriman ke seluruh Indonesia lewat ekspedisi. Pembelian grosir untuk toko tani, tanyakan harga khusus.'}
+        </p>
+      </div>
+    </div>
+    {lain.length > 0 && (
+      <section class="bagian" style="padding-top:0">
+        <h2>{bekas ? 'Barang bekas lainnya' : 'Perkakas lain di kategori ini'}</h2>
+        <div class="grid-produk">{lain.map((x) => <KartuProduk p={x} />)}</div>
+      </section>
+    )}
+  </div>
+</Base>

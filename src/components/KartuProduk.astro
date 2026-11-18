@@ -1,0 +1,26 @@
+---
+import { rupiah, urlProduk, STATUS } from '../lib/data.js';
+interface Props { p: any }
+const { p } = Astro.props;
+const terjual = p.stok === 'terjual';
+---
+<article class:list={['kartu', { 'kartu--terjual': terjual }]} data-kategori={p.kategori} data-cari={`${p.nama} ${p.kategori} ${p.ringkas}`.toLowerCase()}>
+  <div class="kartu__foto">
+    {p.foto[0] && <img src={p.foto[0]} alt={p.nama} width="400" height="300" loading="lazy" decoding="async" />}
+    <div class="kartu__label">
+      {p.contoh && <span class="label label--contoh">Contoh</span>}
+      {p.segmen === 'bekas' && <span class="label label--bekas">Bekas</span>}
+      {p.stok === 'dipesan' && <span class="label label--dipesan">Dipesan</span>}
+      {terjual && <span class="label label--terjual">Terjual</span>}
+    </div>
+  </div>
+  <div class="kartu__isi">
+    <span class="kartu__kat">{p.kategori}</span>
+    <h3><a href={urlProduk(p)}>{p.nama}</a></h3>
+    {p.harga ? (
+      <span class="kartu__harga">{rupiah(p.harga)} <small class="redup">/ {p.satuan}</small></span>
+    ) : (
+      <span class="kartu__harga kartu__harga--tanya">{terjual ? STATUS.terjual : 'Tanya harga'}</span>
+    )}
+  </div>
+</article>

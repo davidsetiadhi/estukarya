@@ -1,0 +1,17 @@
+---
+// Round "cast mark" stamp: the brand's one memorable element.
+interface Props { class?: string }
+const { class: kelas = 'cap' } = Astro.props;
+---
+<svg class={kelas} viewBox="0 0 200 200" role="img" aria-label="Estu Karya, Ceper Klaten, sejak 1986">
+  <defs>
+    <path id="lingkar" d="M100,100 m-74,0 a74,74 0 1,1 148,0 a74,74 0 1,1 -148,0" />
+  </defs>
+  <circle cx="100" cy="100" r="96" fill="none" stroke="currentColor" stroke-width="4" />
+  <circle cx="100" cy="100" r="56" fill="none" stroke="currentColor" stroke-width="2" />
+  <text font-size="16" font-weight="700" fill="currentColor">
+    <textPath href="#lingkar" textLength="455" lengthAdjust="spacing">ESTU KARYA ✦ CEPER KLATEN ✦ ALAT TANI ✦</textPath>
+  </text>
+  <text x="100" y="94" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor" letter-spacing="2">SEJAK</text>
+  <text x="100" y="124" text-anchor="middle" font-size="34" font-weight="800" fill="currentColor">1986</text>
+</svg>

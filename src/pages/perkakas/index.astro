@@ -1,0 +1,19 @@
+---
+import Base from '../../layouts/Base.astro';
+import Katalog from '../../components/Katalog.astro';
+import { produkSegmen } from '../../lib/data.js';
+const produk = await produkSegmen('perkakas');
+---
+<Base judul="Jual cangkul, sabit, parang, sekop, dan wajan cor besi" deskripsi="Katalog alat tani dan perkakas Estu Karya: cangkul, garpu tanah, sabit, parang, sekop, sorok, pisau deres, dan wajan cor besi. Eceran dan grosir, kirim ke seluruh Indonesia.">
+  <section class="bagian">
+    <div class="wadah">
+      <div class="kepala-bagian">
+        <div>
+          <h1>Perkakas dan alat tani</h1>
+          <p class="redup">Eceran dan grosir untuk petani, toko tani, dan usaha rumahan. Harga belum tercantum bisa ditanyakan lewat WhatsApp.</p>
+        </div>
+      </div>
+      <Katalog produk={produk} labelCari="Cari perkakas, misalnya cangkul" kosong="Katalog perkakas sedang disiapkan." waKosong="Halo Estu Karya, saya cari perkakas:" />
+    </div>
+  </section>
+</Base>

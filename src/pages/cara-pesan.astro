@@ -1,0 +1,28 @@
+---
+import Base from '../layouts/Base.astro';
+import Ikon from '../components/Ikon.astro';
+import { waLink, u } from '../lib/data.js';
+---
+<Base judul="Cara pesan, bayar, dan pengiriman" deskripsi="Cara memesan di Estu Karya: pilih barang, kirim pesanan lewat WhatsApp, bayar dengan transfer, dan barang dikirim ke seluruh Indonesia.">
+  <div class="wadah tulisan">
+    <h1>Cara pesan</h1>
+    <ol class="langkah">
+      <li><div><h3>Pilih barang</h3><p>Buka <a href={u('/perkakas/')}>Perkakas</a> atau <a href={u('/barang-bekas/')}>Barang bekas</a>, lalu tekan "Tambah ke keranjang". Kalau barang yang kamu cari tidak ada, tanyakan saja lewat WhatsApp.</p></div></li>
+      <li><div><h3>Kirim pesanan</h3><p>Buka keranjang, isi nama dan kota tujuan, lalu tekan "Pesan lewat WhatsApp". Daftar barang otomatis tersusun di chat, kamu tinggal mengirimnya.</p></div></li>
+      <li><div><h3>Terima total dan ongkir</h3><p>Admin membalas dengan harga akhir, ongkos kirim, dan perkiraan waktu sampai.</p></div></li>
+      <li><div><h3>Bayar</h3><p>Transfer ke rekening atas nama Estu Karya yang dikirim admin, lalu kirim foto bukti transfer di chat yang sama.</p></div></li>
+      <li><div><h3>Barang dikirim</h3><p>Barang dikemas dan dikirim. Nomor resi dikirim lewat WhatsApp supaya bisa kamu lacak.</p></div></li>
+    </ol>
+
+    <h2>Pengiriman</h2>
+    <p>Perkakas tangan seperti cangkul, sabit, dan sekop dikirim lewat ekspedisi reguler ke seluruh Indonesia. Mesin dan barang berat dikirim lewat kargo atau truk, dan ongkirnya dihitung sesuai berat dan tujuan. Barang juga bisa diambil sendiri di Ceper, Klaten.</p>
+
+    <h2>Grosir untuk toko tani</h2>
+    <p>Pembelian dalam jumlah banyak mendapat harga grosir. Sebutkan jumlah yang kamu butuhkan di chat, nanti admin mengirim penawaran.</p>
+
+    <h2>Barang bekas</h2>
+    <p>Setiap barang bekas hanya ada satu unit. Minta foto tambahan atau video mesin menyala sebelum membayar, atau lihat langsung di gudang. Barang yang sudah dibayar ditandai "Terjual" di website.</p>
+
+    <p><a class="tombol tombol--wa" href={waLink('Halo Estu Karya, saya mau tanya cara pesan.')} target="_blank" rel="noopener"><Ikon nama="wa" />Tanya admin lewat WhatsApp</a></p>
+  </div>
+</Base>
