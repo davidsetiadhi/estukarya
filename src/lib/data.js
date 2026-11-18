@@ -89,6 +89,10 @@ export async function produkSegmen(segmen) {
   return (await semuaProduk()).filter((p) => p.segmen === segmen);
 }
 
+/** Catalog tab a product belongs to: Perkakas, Mesin, or Barang bekas. */
+export const kelompok = (p) => (p.segmen === 'bekas' ? 'Barang bekas' : /^Mesin/.test(p.kategori) ? 'Mesin' : 'Perkakas');
+export const KELOMPOK = ['Perkakas', 'Mesin', 'Barang bekas'];
+
 export const rupiah = (n) => 'Rp ' + n.toLocaleString('id-ID');
 
 export const urlProduk = (p) => u(`/${p.segmen === 'bekas' ? 'barang-bekas' : 'perkakas'}/${p.id}/`);

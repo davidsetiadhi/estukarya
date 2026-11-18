@@ -1,0 +1,25 @@
+---
+import Base from '../layouts/Base.astro';
+import { u } from '../lib/data.js';
+import kredit from '../data/kredit-foto.json';
+const daftar = Object.entries(kredit).sort(([a], [b]) => a.localeCompare(b));
+---
+<Base judul="Kredit foto" deskripsi="Sumber dan lisensi foto contoh yang dipakai di katalog uji coba Estu Karya.">
+  <div class="wadah tulisan" style="max-width:none">
+    <h1 class="judul-besar">Kredit foto</h1>
+    <p>Katalog uji coba ini memakai foto contoh berlisensi terbuka dari Wikimedia Commons, sampai foto produk Estu Karya sendiri siap. Foto contoh tidak selalu menunjukkan barang yang dijual. Foto bengkel di halaman sejarah berasal dari arsip website lama Estu Karya.</p>
+    <table class="spek">
+      <thead><tr><th scope="col">Foto</th><th scope="col">Dipakai untuk</th><th scope="col">Pembuat</th><th scope="col">Lisensi</th></tr></thead>
+      <tbody>
+        {daftar.map(([file, k]) => (
+          <tr>
+            <td><img src={u(`/foto/${file}`)} alt="" width="72" height="72" loading="lazy" style="width:72px;height:72px;object-fit:cover" /></td>
+            <td>{k.dipakai_untuk === '_hero' ? 'Foto utama beranda' : k.dipakai_untuk}</td>
+            <td>{k.pembuat}<br /><a href={k.sumber} target="_blank" rel="noopener">{k.judul}</a></td>
+            <td>{k.lisensi_url ? <a href={k.lisensi_url} target="_blank" rel="noopener">{k.lisensi}</a> : k.lisensi}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</Base>

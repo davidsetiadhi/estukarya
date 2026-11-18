@@ -152,13 +152,18 @@ export function pasangKeranjang() {
     const kartu = [...daftar.querySelectorAll('[data-kategori]')];
     const cari = document.querySelector('[data-cari]');
     const tombol = [...document.querySelectorAll('[data-filter]')];
+    const tab = [...document.querySelectorAll('[data-tab]')];
+    let grup = 'semua';
     const kosong = document.querySelector('[data-tidak-ketemu]');
     let kat = 'semua';
     const terapkan = () => {
       const q = (cari?.value || '').toLowerCase().trim();
       let tampil = 0;
       kartu.forEach((k) => {
-        const cocok = (kat === 'semua' || k.dataset.kategori === kat) && (!q || k.dataset.cari.includes(q));
+        const cocok =
+          (kat === 'semua' || k.dataset.kategori === kat) &&
+          (grup === 'semua' || k.dataset.kelompok === grup) &&
+          (!q || k.dataset.cari.includes(q));
         k.hidden = !cocok;
         if (cocok) tampil++;
       });
@@ -168,6 +173,13 @@ export function pasangKeranjang() {
       b.addEventListener('click', () => {
         kat = b.dataset.filter;
         tombol.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+        terapkan();
+      })
+    );
+    tab.forEach((b) =>
+      b.addEventListener('click', () => {
+        grup = b.dataset.tab;
+        tab.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
         terapkan();
       })
     );

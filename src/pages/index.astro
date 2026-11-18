@@ -3,91 +3,116 @@ import Base from '../layouts/Base.astro';
 import Cap from '../components/Cap.astro';
 import Ikon from '../components/Ikon.astro';
 import KartuProduk from '../components/KartuProduk.astro';
-import { produkSegmen, waLink, toko, u } from '../lib/data.js';
-const perkakas = await produkSegmen('perkakas');
-const bekas = (await produkSegmen('bekas')).filter((p) => p.stok !== 'terjual');
-const pilihan = perkakas.slice(0, 8);
+import { semuaProduk, waLink, toko, u, KELOMPOK, kelompok } from '../lib/data.js';
+const produk = await semuaProduk();
+const jumlah = Object.fromEntries(KELOMPOK.map((k) => [k, produk.filter((p) => kelompok(p) === k).length]));
+const tahun = new Date().getFullYear() - toko.berdiri;
+
+const sejarah = [
+  {
+    tahun: '1986',
+    judul: 'Bengkel dibuka di Ceper',
+    teks: 'Bapak Samidi mendirikan Estu Karya di tepi jalan Solo-Yogya, Ceper, Klaten, dengan peralatan bengkel sederhana dan pengalaman kerja di bidang alat mesin pertanian.',
+    foto: '/foto/arsip/pande-besi.jpg',
+    alt: 'Pande besi di bengkel Estu Karya',
+  },
+  {
+    tahun: '2013',
+    judul: 'Katalog online pertama',
+    teks: 'Website estukarya.com terbit dengan lebih dari 40 produk buatan bengkel sendiri: power thresher, hammermill, mesin pakan ikan, cangkul, dan sabit.',
+    foto: '/foto/arsip/proses-pembuatan-alat-mesin-pertanian.jpg',
+    alt: 'Perakitan alat mesin pertanian di bengkel Estu Karya',
+  },
+  {
+    tahun: '2015',
+    judul: 'Gudang barang teknik dibuka untuk umum',
+    teks: 'Mesin dan peralatan dari gudang mulai dijual satuan dan dilelang, dari mesin bubut sampai granulator dan dryer pupuk.',
+    foto: '/foto/arsip/granulator.jpg',
+    alt: 'Granulator pupuk di gudang Estu Karya',
+  },
+  {
+    tahun: 'Kini',
+    judul: 'Supplier di Meger, Ceper',
+    teks: 'Dengan logo baru, Estu Karya memasok alat mesin, perkakas, dan teknologi tepat guna, eceran dan grosir, ke seluruh Indonesia.',
+    foto: '/logo/logo-lengkap.png',
+    alt: 'Logo Estu Karya',
+    logo: true,
+  },
+];
 ---
 <Base judul={toko.nama}>
   <section class="hero">
-    <div class="hero__foto"><img src={u('/foto/situs/hero-bengkel.jpg')} alt="" width="1600" height="900" fetchpriority="high" /></div>
     <div class="wadah">
       <div>
-        <h1>Alat tani dan perkakas dari Ceper, Klaten.</h1>
-        <p>Estu Karya melayani petani dan toko tani sejak 1986. Dulu bengkel kami membuat sendiri perontok padi, cangkul, dan sabit. Sekarang kami memasok perkakas pilihan, eceran maupun grosir, dan menjual barang teknik bekas dari gudang.</p>
+        <h1>Alat mesin dan perkakas sejak 1986</h1>
+        <p>Dari bengkel pande besi di Ceper, Klaten, sampai supplier untuk petani, toko tani, bengkel, dan usaha rumahan di seluruh Indonesia. Eceran dan grosir, pesan langsung lewat WhatsApp.</p>
         <div class="hero__aksi">
-          <a class="tombol tombol--utama" href={u('/perkakas/')}>Lihat perkakas</a>
+          <a class="tombol tombol--utama" href="#katalog">Lihat katalog</a>
           <a class="tombol tombol--garis" href={waLink('Halo Estu Karya, saya mau bertanya.')} target="_blank" rel="noopener"><Ikon nama="wa" />Chat WhatsApp</a>
         </div>
+        <div class="hero__fakta">
+          <div><b>{tahun} tahun</b><span>berdiri di Ceper, Klaten</span></div>
+          <div><b>{produk.length} barang</b><span>di katalog</span></div>
+          <div><b>Eceran dan grosir</b><span>kirim ke seluruh Indonesia</span></div>
+        </div>
       </div>
-      <Cap />
+      <figure class="hero__foto" style="margin:0">
+        <img src={u('/foto/situs/hero.jpg')} alt="Sawah di Jawa" width="1200" height="900" fetchpriority="high" />
+        <Cap />
+      </figure>
     </div>
   </section>
 
   <section class="bagian">
     <div class="wadah">
-      <h2 class="sr-only">Pilih yang kamu cari</h2>
-      <div class="pintu">
-        <a href={u('/perkakas/')}>
-          <img src={u('/foto/situs/pintu-perkakas.jpg')} alt="" width="800" height="600" loading="lazy" />
-          <div>
-            <h2>Perkakas dan alat tani</h2>
-            <p>Cangkul, garpu tanah, sabit, parang, sekop, sorok, dan wajan cor besi. Ada harga grosir untuk toko.</p>
-            <span>{perkakas.length} barang di katalog</span>
-          </div>
-        </a>
-        <a href={u('/barang-bekas/')}>
-          <img src={u('/foto/situs/pintu-bekas.jpg')} alt="" width="800" height="600" loading="lazy" />
-          <div>
-            <h2>Barang bekas teknik</h2>
-            <p>Mesin bengkel, mesin pertanian, dan suku cadang dari gudang. Satu barang satu unit, harga bisa nego.</p>
-            <span>{bekas.length ? `${bekas.length} barang tersedia` : 'Segera diunggah'}</span>
-          </div>
-        </a>
+      <div class="kepala-bagian">
+        <div>
+          <h2 class="judul-besar">Empat puluh tahun di alat tani</h2>
+          <p class="redup">Perjalanan Estu Karya dari bengkel produksi sampai supplier, dari arsip keluarga dan website lama.</p>
+        </div>
+        <a href={u('/tentang/')}>Baca sejarah lengkap</a>
+      </div>
+      <div class="linimasa">
+        {sejarah.map((s) => (
+          <article class="pos">
+            <div class="pos__foto">
+              <img src={u(s.foto)} alt={s.alt} width="600" height="450" loading="lazy" style={s.logo ? 'object-fit:contain;padding:1.25rem;background:#fff' : undefined} />
+            </div>
+            <div class="pos__isi">
+              <span class="pos__tahun">{s.tahun}</span>
+              <h3>{s.judul}</h3>
+              <p>{s.teks}</p>
+            </div>
+          </article>
+        ))}
       </div>
     </div>
   </section>
 
-  <section class="bagian bagian--putih">
+  <section class="bagian pita-navy" id="katalog">
     <div class="wadah">
       <div class="kepala-bagian">
-        <h2>Perkakas yang sering dicari</h2>
-        <a href={u('/perkakas/')}>Semua perkakas</a>
+        <div>
+          <h2 class="judul-besar">Katalog</h2>
+          <p class="redup">Pilih barang, masukkan keranjang, lalu kirim pesanan lewat WhatsApp.</p>
+        </div>
       </div>
-      <div class="grid-produk">{pilihan.map((p) => <KartuProduk p={p} />)}</div>
+      <div class="tab-katalog" role="group" aria-label="Pilih kelompok barang">
+        <button type="button" data-tab="semua" aria-pressed="true">Semua ({produk.length})</button>
+        {KELOMPOK.map((k) => <button type="button" data-tab={k} aria-pressed="false">{k} ({jumlah[k]})</button>)}
+      </div>
+      <div class="grid-produk" data-katalog>
+        {produk.map((p) => <KartuProduk p={p} />)}
+      </div>
     </div>
   </section>
 
   <section class="bagian">
     <div class="wadah alasan">
-      <div><Ikon nama="sejarah" /><h3>Di Ceper sejak 1986</h3><p>Empat puluh tahun di bidang alat pertanian, dari bengkel produksi sampai supplier.</p></div>
+      <div><Ikon nama="sejarah" /><h3>Berdiri sejak 1986</h3><p>Pengalaman bengkel produksi dipakai untuk memilih alat yang awet.</p></div>
       <div><Ikon nama="grosir" /><h3>Eceran dan grosir</h3><p>Beli satu untuk sawah sendiri, atau satu kodi untuk stok toko tani.</p></div>
-      <div><Ikon nama="truk" /><h3>Kirim ke seluruh Indonesia</h3><p>Lewat ekspedisi untuk perkakas, dan kargo atau truk untuk mesin berat.</p></div>
-      <div><Ikon nama="wa" /><h3>Pesan lewat WhatsApp</h3><p>Pilih barang, kirim pesanan, dan admin membalas dengan ongkir dan cara bayar.</p></div>
-    </div>
-  </section>
-
-  <section class="bagian bagian--putih">
-    <div class="wadah warisan">
-      <img src={u('/foto/situs/warisan.jpg')} alt="Proses pembuatan alat mesin pertanian di bengkel Estu Karya" width="800" height="600" loading="lazy" />
-      <div>
-        <h2>Dari bengkel pande besi ke supplier</h2>
-        <p>Bapak Samidi mendirikan Estu Karya pada 1986 dengan peralatan sederhana dan pengalaman alat mesin pertanian yang beliau dapat saat bekerja di perusahaan. Bengkel di Jalan Solo-Yogya km 28 lalu membuat power thresher, hammermill, pencetak pakan ikan, dan perkakas tangan untuk petani.</p>
-        <p>Produksi sudah berhenti, tapi pengalaman memilih alat yang awet masih kami pakai untuk memasok perkakas hari ini.</p>
-        <a class="tombol tombol--garis" href={u('/tentang/')}>Baca sejarah Estu Karya</a>
-      </div>
-    </div>
-  </section>
-
-  <section class="bagian">
-    <div class="wadah">
-      <h2>Cara pesan</h2>
-      <ol class="langkah" style="margin-top:1.25rem">
-        <li><div><h3>Pilih barang</h3><p>Masukkan ke keranjang, atau tanyakan langsung barang yang kamu cari.</p></div></li>
-        <li><div><h3>Kirim pesanan lewat WhatsApp</h3><p>Isi nama dan kota tujuan. Pesanan otomatis tersusun rapi di chat.</p></div></li>
-        <li><div><h3>Bayar dan barang dikirim</h3><p>Admin membalas dengan total, ongkir, dan nomor rekening. Setelah transfer, barang dikirim beserta nomor resi.</p></div></li>
-      </ol>
-      <p style="margin-top:1.5rem"><a href={u('/cara-pesan/')}>Detail pembayaran dan pengiriman</a></p>
+      <div><Ikon nama="truk" /><h3>Kirim ke seluruh Indonesia</h3><p>Ekspedisi untuk perkakas, kargo atau truk untuk mesin berat.</p></div>
+      <div><Ikon nama="wa" /><h3>Pesan lewat WhatsApp</h3><p>Admin membalas dengan total, ongkir, dan cara bayar.</p></div>
     </div>
   </section>
 </Base>
