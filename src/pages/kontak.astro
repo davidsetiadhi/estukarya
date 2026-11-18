@@ -20,6 +20,16 @@ const a = toko.alamat;
         <ul>{toko.jam_buka.map((j) => <li>{j.hari}: {j.jam}</li>)}</ul>
       </>
     )}
+    {(toko.instagram || toko.bukalapak) && (
+      <>
+        <h2>Instagram dan marketplace</h2>
+        <p>
+          {toko.instagram && <a href={toko.instagram} target="_blank" rel="noopener">Instagram @estukaryaofficial</a>}
+          {toko.instagram && toko.bukalapak && <br />}
+          {toko.bukalapak && <a href={toko.bukalapak} target="_blank" rel="noopener">Toko Estu Karya di Bukalapak</a>}
+        </p>
+      </>
+    )}
     <h2>Telepon dan email</h2>
     <p>Telepon {toko.telepon}<br />Email <a href={`mailto:${toko.email}`}>{toko.email}</a></p>
   </div>
