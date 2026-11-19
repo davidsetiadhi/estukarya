@@ -49,7 +49,8 @@ GitHub Pages tidak boleh dipakai untuk toko online, jadi website ini di-host di 
 
 1. Masuk ke dash.cloudflare.com, buka Workers & Pages, Create, Pages, Connect to Git.
 2. Pilih repo ini. Framework preset: Astro. Build command: `npm run build`. Output: `dist`.
-3. Setelah tayang di `estukarya.pages.dev`, sambungkan domain `estukarya.id` lewat Custom domains, lalu ganti `site` di `astro.config.mjs` dan alamat sitemap di `public/robots.txt`.
+   Versi Node dibaca dari `.node-version` (24). Jangan isi variabel `GITHUB_PAGES` di Cloudflare.
+3. Setelah tayang di `estukarya.pages.dev`, sambungkan domain `estukarya.id` lewat Custom domains, lalu ganti `site` di `astro.config.mjs` dan alamat sitemap di `public/robots.txt`. Langkah DNS lengkap ada di `D:\Website\DOMAIN-SETUP.md`.
 
 ## Foto
 

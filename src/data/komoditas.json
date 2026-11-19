@@ -1,0 +1,38 @@
+[
+  {
+    "slug": "sawit",
+    "judul": "Alat panen sawit grosir untuk toko tani",
+    "h1": "Alat kebun sawit, grosir dari Ceper",
+    "ringkas": "Egrek, parang, sabit, dan cangkul untuk toko tani dan koperasi kebun sawit di Sumatra dan Kalimantan.",
+    "daerah": ["Riau", "Jambi", "Sumatera Utara", "Kalimantan Barat", "Kalimantan Tengah", "Kalimantan Timur"],
+    "intro": "Alat panen sawit cepat aus, jadi toko tani di daerah kebun membelinya terus sepanjang tahun. Estu Karya memasok dari perajin pandai besi di Ceper, Klaten, dan mengirim grosir lewat kargo ke Sumatra dan Kalimantan.",
+    "produk": ["egrek-sabit-kelapa", "parang", "parang-panjang", "sabit-panjang", "cangkul-dpu", "sekop"]
+  },
+  {
+    "slug": "karet",
+    "judul": "Pisau deres karet grosir untuk toko tani",
+    "h1": "Pisau deres dan alat kebun karet, grosir",
+    "ringkas": "Pisau sadap karet dan alat kebun untuk toko tani dan pengepul di Sumatra Selatan, Jambi, dan Kalimantan.",
+    "daerah": ["Sumatera Selatan", "Jambi", "Riau", "Kalimantan Barat", "Bengkulu"],
+    "intro": "Penyadap karet mengganti pisau deres secara rutin, jadi toko di sentra karet butuh stok yang tidak putus. Kirim jumlah dan kota tujuan, nanti admin mengirim penawaran grosir beserta ongkir kargo.",
+    "produk": ["pisau-deres-karet", "parang", "sabit-panjang", "cangkul-dpu", "sorok"]
+  },
+  {
+    "slug": "jagung",
+    "judul": "Pemipil jagung dan alat tani grosir",
+    "h1": "Pemipil jagung dan alat tani untuk sentra jagung",
+    "ringkas": "Thresher jagung, cangkul, dan sabit untuk kelompok tani, toko tani, dan pengusaha jasa pipil di NTB, Sulawesi, dan Lampung.",
+    "daerah": ["Nusa Tenggara Barat", "Sulawesi Selatan", "Gorontalo", "Lampung", "Jawa Timur"],
+    "intro": "Di sentra jagung, mesin pemipil dipakai bergiliran oleh banyak petani, dan alat tangan dibeli setiap musim tanam. Estu Karya menyediakan keduanya dan mengirim mesin lewat kargo atau truk.",
+    "produk": ["thresher-jagung", "pemipil-jagung-bekas", "pacul-jawa", "cangkul-dpu", "sabit-bergerigi"]
+  },
+  {
+    "slug": "dapur",
+    "judul": "Wajan cor besi dan mesin usaha makanan, grosir",
+    "h1": "Wajan cor besi dan mesin untuk usaha makanan",
+    "ringkas": "Wajan cor besi tebal dan mesin pengolahan untuk produsen gula jawa, kecap, makanan ringan, dan toko alat dapur usaha.",
+    "daerah": ["Seluruh Indonesia"],
+    "intro": "Wajan cor besi menahan panas lama dan merata, jadi dipakai produsen gula jawa, kecap, manisan, dan dodol. Toko alat dapur usaha bisa membeli grosir dan menjualnya lagi.",
+    "produk": ["wajan-cor-besi", "mesin-penggiling-bakso", "mesin-potong-singkong", "mesin-pembuat-tepung"]
+  }
+]

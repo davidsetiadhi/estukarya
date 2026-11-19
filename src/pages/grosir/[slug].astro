@@ -1,0 +1,44 @@
+---
+import Base from '../../layouts/Base.astro';
+import KartuProduk from '../../components/KartuProduk.astro';
+import KalkulatorGrosir from '../../components/KalkulatorGrosir.astro';
+import Ikon from '../../components/Ikon.astro';
+import komoditas from '../../data/komoditas.json';
+import { semuaProduk, waLink, u } from '../../lib/data.js';
+
+export function getStaticPaths() {
+  return komoditas.map((k) => ({ params: { slug: k.slug }, props: { k } }));
+}
+const { k } = Astro.props;
+const semua = await semuaProduk();
+const produk = k.produk.map((id) => semua.find((p) => p.id === id)).filter((p) => p && p.tampil);
+const lain = komoditas.filter((x) => x.slug !== k.slug);
+---
+<Base judul={k.judul} deskripsi={k.ringkas}>
+  <section class="bagian">
+    <div class="wadah">
+      <p class="remah"><a href={u('/grosir/')}>Grosir</a> / {k.h1}</p>
+      <h1>{k.h1}</h1>
+      <p class="tulisan" style="padding:0.5rem 0 0">{k.intro}</p>
+      <p class="daerah"><Ikon nama="lokasi" /><span>Sering dikirim ke: {k.daerah.join(', ')}</span></p>
+      <ul class="alasan-grosir">
+        <li><Ikon nama="grosir" /><span><b>Harga grosir</b> mulai 1 kodi (20 buah) per barang</span></li>
+        <li><Ikon nama="truk" /><span><b>Kirim lewat kargo</b>, ongkir dihitung sesuai berat dan tujuan</span></li>
+        <li><Ikon nama="cek" /><span><b>DP 50%</b>, pelunasan sebelum barang dikirim</span></li>
+      </ul>
+    </div>
+  </section>
+  <section class="bagian bagian--putih">
+    <div class="wadah">
+      <h2>Barang untuk kebutuhan ini</h2>
+      <div class="grid-produk">{produk.map((p) => <KartuProduk p={p} />)}</div>
+    </div>
+  </section>
+  <section class="bagian">
+    <div class="wadah">
+      <KalkulatorGrosir produk={produk} sumber={k.slug} />
+      <p class="redup" style="margin-top:1.5rem">Punya toko di daerah dan ingin menjual barang Estu Karya? <a href={u('/agen/')}>Lihat cara menjadi agen daerah</a>.</p>
+      <p class="redup">Kebutuhan lain: {lain.map((x, i) => <>{i > 0 && ', '}<a href={u(`/grosir/${x.slug}/`)}>{x.h1.toLowerCase()}</a></>)}.</p>
+    </div>
+  </section>
+</Base>

@@ -80,6 +80,7 @@ function pesanWA(nama, kota, catatan) {
     ...(catatan ? [`Catatan: ${catatan}`] : []),
     '',
     'Mohon info harga akhir, ongkir, dan cara bayarnya. Terima kasih.',
+    ...(window.ESTU_REF ? ['', `(Kode: ${window.ESTU_REF})`] : []),
   ].join('\n');
   return `https://wa.me/${window.ESTU_WA}?text=${encodeURIComponent(teks)}`;
 }

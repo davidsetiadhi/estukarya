@@ -19,6 +19,7 @@ const path = Astro.url.pathname;
 const menu = [
   ['/perkakas/', 'Perkakas'],
   ['/barang-bekas/', 'Barang bekas'],
+  ['/grosir/', 'Grosir'],
   ['/cara-pesan/', 'Cara pesan'],
   ['/tentang/', 'Tentang'],
   ['/artikel/', 'Artikel'],
@@ -167,6 +168,15 @@ const semuaSchema = [bisnis, ...schema];
     </script>
     <script>
       import { pasangKeranjang } from '../lib/keranjang.js';
+      // Source code on every WhatsApp message, so the admin can count which page each chat came from.
+      const jalur = location.pathname.slice(import.meta.env.BASE_URL.replace(/\/$/, '').length).replace(/^\/|\/$/g, '');
+      const ref = 'web-' + (jalur ? jalur.replace(/\//g, '-') : 'beranda');
+      (window as any).ESTU_REF = ref;
+      document.querySelectorAll<HTMLAnchorElement>('a[href^="https://wa.me/"]').forEach((a) => {
+        const url = new URL(a.href);
+        url.searchParams.set('text', (url.searchParams.get('text') || '') + `\n\n(Kode: ${ref})`);
+        a.href = url.toString();
+      });
       pasangKeranjang();
       const tombolMenu = document.querySelector('[data-menu]');
       const nav = document.getElementById('nav-utama');

@@ -1,0 +1,29 @@
+---
+import Base from '../../layouts/Base.astro';
+import KalkulatorGrosir from '../../components/KalkulatorGrosir.astro';
+import komoditas from '../../data/komoditas.json';
+import { produkSegmen, u } from '../../lib/data.js';
+const produk = (await produkSegmen('perkakas')).filter((p) => p.tampil);
+---
+<Base judul="Grosir alat tani untuk toko tani dan koperasi" deskripsi="Beli grosir cangkul, sabit, egrek, pisau deres, wajan cor, dan mesin pertanian dari Ceper, Klaten. Mulai 1 kodi, kirim lewat kargo ke seluruh Indonesia.">
+  <section class="bagian">
+    <div class="wadah">
+      <h1>Grosir untuk toko tani, koperasi, dan usaha</h1>
+      <p class="redup">Pilih sesuai kebutuhan daerah, atau langsung isi jumlah di bawah.</p>
+      <div class="pintu-grosir">
+        {komoditas.map((k) => (
+          <a class="pintu-grosir__item" href={u(`/grosir/${k.slug}/`)}>
+            <b>{k.h1}</b>
+            <span>{k.ringkas}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+  <section class="bagian bagian--putih">
+    <div class="wadah">
+      <KalkulatorGrosir produk={produk} sumber="semua" />
+      <p class="redup" style="margin-top:1.5rem">Ingin menjual barang Estu Karya di daerahmu? <a href={u('/agen/')}>Jadi agen daerah</a>.</p>
+    </div>
+  </section>
+</Base>

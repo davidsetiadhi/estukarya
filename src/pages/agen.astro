@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro';
+import Ikon from '../components/Ikon.astro';
+import { waLink, u } from '../lib/data.js';
+const pesan = 'Halo Estu Karya, saya tertarik menjadi agen daerah.\n\nNama:\nNama toko (kalau ada):\nKota/kabupaten:\nBarang yang paling dicari di daerah saya:';
+---
+<Base judul="Jadi agen daerah Estu Karya" deskripsi="Toko tani, pedagang, atau koperasi di luar Jawa bisa menjadi agen daerah Estu Karya: jual alat tani dari Ceper, Klaten, dan dapat komisi dari setiap pesanan.">
+  <div class="wadah tulisan">
+    <h1>Jadi agen daerah</h1>
+    <p>Pembeli di Sumatra, Kalimantan, Sulawesi, dan Nusa Tenggara lebih percaya kepada orang yang mereka kenal. Karena itu Estu Karya mencari agen di setiap daerah: toko tani, pedagang alat, atau pengurus koperasi yang sudah punya pelanggan.</p>
+
+    <h2>Yang didapat agen</h2>
+    <ul class="alasan-grosir">
+      <li><Ikon nama="grosir" /><span><b>Komisi dari setiap pesanan</b> pelanggan yang datang lewat agen, dibayar setelah pesanan lunas</span></li>
+      <li><Ikon nama="truk" /><span><b>Tidak perlu menyimpan stok besar.</b> Barang dikirim langsung dari Ceper ke pembeli atau ke toko agen</span></li>
+      <li><Ikon nama="cek" /><span><b>Katalog, foto, dan daftar harga</b> yang bisa diteruskan ke pelanggan lewat WhatsApp</span></li>
+    </ul>
+
+    <h2>Syarat</h2>
+    <ol class="langkah">
+      <li><div><h3>Punya pelanggan di daerah</h3><p>Petani, pekebun, kelompok tani, toko bangunan, atau usaha makanan yang membutuhkan alat.</p></div></li>
+      <li><div><h3>Bisa dihubungi lewat WhatsApp</h3><p>Pesanan, foto barang, dan penawaran semuanya lewat chat.</p></div></li>
+      <li><div><h3>Mau mencoba dengan satu pesanan dulu</h3><p>Pesanan pertama dipakai untuk saling mengenal: kualitas barang, waktu kirim, dan cara bayar.</p></div></li>
+    </ol>
+
+    <h2>Cara daftar</h2>
+    <p>Kirim nama, kota, dan barang yang paling dicari di daerahmu. Admin membalas dengan besaran komisi, katalog, dan daftar harga agen.</p>
+    <p><a class="tombol tombol--wa" href={waLink(pesan)} target="_blank" rel="noopener"><Ikon nama="wa" />Daftar agen lewat WhatsApp</a></p>
+    <p class="redup">Belum ingin jadi agen tapi butuh barang dalam jumlah banyak? Buka halaman <a href={u('/grosir/')}>grosir</a>.</p>
+  </div>
+</Base>

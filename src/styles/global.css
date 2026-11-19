@@ -346,3 +346,29 @@ p { margin: 0 0 1em; max-width: 68ch; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; animation: none !important; }
 }
+
+/* Grosir: commodity pages and bulk calculator */
+.daerah { display: flex; gap: 0.5rem; align-items: center; color: var(--navy-3); margin: 0.75rem 0 0; }
+.daerah svg { width: 20px; height: 20px; flex: none; }
+.alasan-grosir { list-style: none; padding: 0; margin: 1.25rem 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 0.75rem 1.5rem; }
+.alasan-grosir li { display: flex; gap: 0.6rem; align-items: flex-start; }
+.alasan-grosir svg { width: 24px; height: 24px; flex: none; color: var(--merah-tua); margin-top: 0.1rem; }
+.pintu-grosir { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+.pintu-grosir__item { display: grid; gap: 0.4rem; padding: 1.1rem 1.2rem; background: var(--putih); border: 1px solid var(--garis); border-top: 6px solid var(--navy); color: inherit; text-decoration: none; }
+.pintu-grosir__item b { font: 800 1.15rem/1.2 var(--f-judul); color: var(--navy); }
+.pintu-grosir__item span { color: var(--navy-3); font-size: 0.95rem; }
+.pintu-grosir__item:hover b, .pintu-grosir__item:focus-visible b { text-decoration: underline; }
+.kalk { background: var(--putih); border: 1px solid var(--garis); border-top: 6px solid var(--merah); padding: clamp(1rem, 3vw, 1.75rem); }
+.kalk__tabel { display: grid; margin: 1rem 0; border-top: 1px solid var(--garis); }
+.kalk__baris { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 0.65rem 0; border-bottom: 1px solid var(--garis); }
+.kalk__baris label { display: grid; gap: 0.15rem; }
+.kalk__input { display: inline-flex; align-items: center; gap: 0.5rem; flex: none; }
+.kalk__input input { width: 6.5rem; min-height: 44px; padding: 0.4rem 0.6rem; border: 1px solid var(--navy-3); border-radius: var(--r-kecil); font: inherit; text-align: right; }
+.kalk__hasil { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.75rem; margin: 1rem 0 1.25rem; }
+.kalk__hasil div { background: var(--daun-muda); padding: 0.7rem 0.9rem; }
+.kalk__hasil b { display: block; font: 800 1.35rem/1.15 var(--f-judul); color: var(--navy); }
+.kalk__hasil span { font-size: 0.9rem; color: var(--navy-3); }
+.kalk__form { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.75rem 1.25rem; align-items: end; }
+.kalk__form label { display: grid; gap: 0.3rem; font-weight: 600; }
+.kalk__form input, .kalk__form select { min-height: 46px; padding: 0.5rem 0.75rem; border: 1px solid var(--navy-3); border-radius: var(--r-kecil); font: inherit; font-weight: 400; background: #fff; }
+.kalk__form .galat, .kalk__form button { grid-column: 1 / -1; }

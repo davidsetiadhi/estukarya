@@ -1,0 +1,114 @@
+---
+// Bulk order calculator: pick quantities, see units, kodi, and an estimate where prices are known,
+// then send the whole request to WhatsApp. Prices come from produk.csv (harga, harga_grosir, min_grosir).
+import Ikon from './Ikon.astro';
+import { rupiah } from '../lib/data.js';
+interface Props { produk: any[]; sumber: string }
+const { produk, sumber } = Astro.props;
+const barang = produk
+  .filter((p) => p.segmen === 'perkakas' && p.stok !== 'habis')
+  .map((p) => ({ id: p.id, nama: p.nama, satuan: p.satuan, harga: p.harga, hargaGrosir: p.hargaGrosir, minGrosir: p.minGrosir }));
+const PROVINSI = [
+  'Riau', 'Jambi', 'Sumatera Utara', 'Sumatera Selatan', 'Sumatera Barat', 'Bengkulu', 'Lampung', 'Aceh', 'Kepulauan Riau', 'Kepulauan Bangka Belitung',
+  'Kalimantan Barat', 'Kalimantan Tengah', 'Kalimantan Selatan', 'Kalimantan Timur', 'Kalimantan Utara',
+  'Sulawesi Selatan', 'Sulawesi Tengah', 'Sulawesi Tenggara', 'Sulawesi Barat', 'Sulawesi Utara', 'Gorontalo',
+  'Nusa Tenggara Barat', 'Nusa Tenggara Timur', 'Bali', 'Maluku', 'Maluku Utara',
+  'Papua', 'Papua Barat', 'Papua Barat Daya', 'Papua Tengah', 'Papua Pegunungan', 'Papua Selatan',
+  'Jawa Timur', 'Jawa Tengah', 'DI Yogyakarta', 'Jawa Barat', 'DKI Jakarta', 'Banten',
+];
+---
+<section class="kalk" data-kalk data-sumber={sumber} data-barang={JSON.stringify(barang)} aria-labelledby={`kalk-${sumber}`}>
+  <h2 id={`kalk-${sumber}`}>Hitung pesanan grosir</h2>
+  <p class="redup">Isi jumlah yang dibutuhkan. 1 kodi = 20 buah. Harga akhir dan ongkir kargo dikirim admin lewat WhatsApp.</p>
+  <div class="kalk__tabel">
+    {barang.map((b) => (
+      <div class="kalk__baris">
+        <label for={`jml-${sumber}-${b.id}`}>
+          <b>{b.nama}</b>
+          <small class="redup">
+            {b.harga ? `${rupiah(b.harga)} / ${b.satuan}` : 'Harga ditanyakan'}
+            {b.hargaGrosir && b.minGrosir ? `, grosir ${rupiah(b.hargaGrosir)} mulai ${b.minGrosir} ${b.satuan}` : ''}
+          </small>
+        </label>
+        <span class="kalk__input">
+          <input id={`jml-${sumber}-${b.id}`} type="number" inputmode="numeric" min="0" step="1" value="0" data-id={b.id} />
+          <span>{b.satuan}</span>
+        </span>
+      </div>
+    ))}
+  </div>
+  <div class="kalk__hasil" aria-live="polite">
+    <div><b data-hasil="barang">0</b><span>barang</span></div>
+    <div><b data-hasil="kodi">0</b><span>kodi alat tangan</span></div>
+    <div><b data-hasil="nilai">-</b><span>perkiraan nilai barang</span></div>
+    <div><b data-hasil="dp">-</b><span>DP 50%</span></div>
+  </div>
+  <form class="kalk__form" novalidate>
+    <label>Nama<input name="nama" autocomplete="name" required /></label>
+    <label>Nama toko atau kelompok tani (tidak wajib)<input name="toko" autocomplete="organization" /></label>
+    <label>Kota atau kabupaten tujuan<input name="kota" autocomplete="address-level2" required /></label>
+    <label>Provinsi
+      <select name="provinsi">{PROVINSI.map((p) => <option>{p}</option>)}</select>
+    </label>
+    <p class="galat" data-galat-kalk hidden></p>
+    <button class="tombol tombol--wa tombol--lebar" type="submit"><Ikon nama="wa" />Minta penawaran lewat WhatsApp</button>
+  </form>
+</section>
+
+<script>
+  const rp = (n: number) => 'Rp ' + Math.round(n).toLocaleString('id-ID');
+  document.querySelectorAll<HTMLElement>('[data-kalk]').forEach((el) => {
+    const barang: any[] = JSON.parse(el.dataset.barang || '[]');
+    const input = [...el.querySelectorAll<HTMLInputElement>('input[data-id]')];
+    const form = el.querySelector('form')!;
+    const galat = el.querySelector<HTMLElement>('[data-galat-kalk]')!;
+    const isi = (k: string, v: string) => (el.querySelector(`[data-hasil="${k}"]`)!.textContent = v);
+    const baca = () =>
+      input
+        .map((i) => ({ b: barang.find((x) => x.id === i.dataset.id), n: Math.max(0, Math.floor(Number(i.value) || 0)) }))
+        .filter((r) => r.n > 0);
+    const hargaSatuan = (b: any, n: number) => (b.hargaGrosir && b.minGrosir && n >= b.minGrosir ? b.hargaGrosir : b.harga);
+    const hitung = () => {
+      const r = baca();
+      const total = r.reduce((s, x) => s + x.n, 0);
+      const kodi = r.filter((x) => x.b.satuan === 'buah').reduce((s, x) => s + x.n, 0) / 20;
+      const berharga = r.filter((x) => hargaSatuan(x.b, x.n));
+      const nilai = berharga.reduce((s, x) => s + hargaSatuan(x.b, x.n) * x.n, 0);
+      isi('barang', String(total));
+      isi('kodi', kodi ? kodi.toLocaleString('id-ID', { maximumFractionDigits: 1 }) : '0');
+      const semua = r.length && berharga.length === r.length;
+      isi('nilai', !r.length ? '-' : semua ? rp(nilai) : berharga.length ? rp(nilai) + ' + tanya harga' : 'Dikirim admin');
+      isi('dp', semua ? rp(nilai / 2) : '-');
+      return r;
+    };
+    el.addEventListener('input', () => { galat.hidden = true; hitung(); });
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const r = hitung();
+      const nama = (form.elements.namedItem('nama') as HTMLInputElement).value.trim();
+      const kota = (form.elements.namedItem('kota') as HTMLInputElement).value.trim();
+      const salah = !r.length ? 'Isi jumlah minimal satu barang.' : !nama ? 'Isi nama dulu.' : !kota ? 'Isi kota tujuan dulu.' : '';
+      galat.hidden = !salah;
+      galat.textContent = salah;
+      if (salah) {
+        (!r.length ? input[0] : (form.elements.namedItem(!nama ? 'nama' : 'kota') as HTMLElement)).focus();
+        return;
+      }
+      const toko = (form.elements.namedItem('toko') as HTMLInputElement).value.trim();
+      const prov = (form.elements.namedItem('provinsi') as HTMLSelectElement).value;
+      const teks = [
+        'Halo Estu Karya, saya minta penawaran grosir:',
+        ...r.map((x, n) => `${n + 1}. ${x.b.nama} x ${x.n} ${x.b.satuan}`),
+        '',
+        `Nama: ${nama}`,
+        ...(toko ? [`Toko/kelompok: ${toko}`] : []),
+        `Tujuan: ${kota}, ${prov}`,
+        '',
+        'Mohon info harga grosir, ongkir kargo, dan waktu kirim. Terima kasih.',
+        '',
+        `(Kode: ${(window as any).ESTU_REF || 'web-grosir-' + el.dataset.sumber})`,
+      ].join('\n');
+      window.open(`https://wa.me/${(window as any).ESTU_WA}?text=${encodeURIComponent(teks)}`, '_blank', 'noopener');
+    });
+  });
+</script>
